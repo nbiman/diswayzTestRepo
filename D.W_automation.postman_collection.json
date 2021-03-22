@@ -1,0 +1,542 @@
+{
+	"info": {
+		"_postman_id": "e734570e-828a-499d-8565-a4604863ed27",
+		"name": "D.W_automation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Organization",
+			"item": [
+				{
+					"name": "create Organization-positive",
+					"item": [
+						{
+							"name": "createOrganization_positive",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Organization should get created\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response has organization id\", function () {",
+											"    const responseJson = pm.response.json();",
+											"    pm.expect(responseJson.organizationId).to.exist;",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"organizationId\", jsonData.organizationId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"//let randomID = {{$randomint(1,5)}};",
+											"let randomID = Math.floor((Math.random()*100)+1);",
+											"let Organization = 'myOrg01'+randomID;",
+											"pm.environment.set('orgName', Organization);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"{{orgName}}\",\n    \"type\": \"organization-type\",\n    \"websiteUrl\": \"https://www.website.url.com\",\n    \"ootbShopUrl\": \"https://www.ootb.shop.url.com\", \n    \"logoUrl\": \"https://www.ootb.shop.url.com\",\n    \"phone\": \"1122334455\",\n    \"email\": \"email@service.com\",\n    \"language\": \"en\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{rootUrl}}/organization",
+									"host": [
+										"{{rootUrl}}"
+									],
+									"path": [
+										"organization"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "createOrganization_validate-duplicateOrgName",
+					"item": [
+						{
+							"name": "createOrganization_positive",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Organization should get created\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response has organization id\", function () {",
+											"    const responseJson = pm.response.json();",
+											"    pm.expect(responseJson.organizationId).to.exist;",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"organizationId\", jsonData.organizationId);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"myORG-01\",\n    \"type\":\"organization-type\",\n    \"websiteUrl\":\"https://www.website.url.com\",\n    \"ootbShopUrl\":\"https://www.ootb.shop.url.com\",\n    \"logoUrl\":\"https://www.ootb.shop.url.com\",\n    \"phone\":\"1122334455\",\n    \"email\":\"email@service.com\",\n    \"language\":\"en\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{rootUrl}}/organization",
+									"host": [
+										"{{rootUrl}}"
+									],
+									"path": [
+										"organization"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "createOrganization_validate-ORG-name_duplicate",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Organization Name already exist\", function () {",
+											"  pm.response.to.have.status(409);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"myORG-01\",\n    \"type\":\"organization-type\",\n    \"websiteUrl\":\"https://www.website.url.com\",\n    \"ootbShopUrl\":\"https://www.ootb.shop.url.com\",\n    \"logoUrl\":\"https://www.ootb.shop.url.com\",\n    \"phone\":\"1122334455\",\n    \"email\":\"email@service.com\",\n    \"language\":\"en\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{rootUrl}}/organization",
+									"host": [
+										"{{rootUrl}}"
+									],
+									"path": [
+										"organization"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "createOrganization_validate-blankOrgName",
+					"item": [
+						{
+							"name": "createOrganization_validate-blankOrgName",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Organization Name shouldn't be Blank\", function () {",
+											"  pm.response.to.have.status(400);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"\",\n    \"type\":\"organization-type\",\n    \"websiteUrl\":\"https://www.website.url.com\",\n    \"ootbShopUrl\":\"https://www.ootb.shop.url.com\",\n    \"logoUrl\":\"https://www.ootb.shop.url.com\",\n    \"phone\":\"1122334455\",\n    \"email\":\"email@service.com\",\n    \"language\":\"en\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{rootUrl}}/organization",
+									"host": [
+										"{{rootUrl}}"
+									],
+									"path": [
+										"organization"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "createOrganization_validate-websiteURL",
+					"item": [
+						{
+							"name": "createOrganization_validate-websiteURL",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Website URL shouln't be Blank\", function () {",
+											"  pm.response.to.have.status(400);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"my_ORG01\",\n    \"type\":\"organization-type\",\n    \"websiteUrl\":\"\",\n    \"ootbShopUrl\":\"https://www.ootb.shop.url.com\",\n    \"logoUrl\":\"https://www.ootb.shop.url.com\",\n    \"phone\":\"1122334455\",\n    \"email\":\"email@service.com\",\n    \"language\":\"en\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{rootUrl}}/organization",
+									"host": [
+										"{{rootUrl}}"
+									],
+									"path": [
+										"organization"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "createOrganization_validate-shopURL",
+					"item": [
+						{
+							"name": "createOrganization_validate-shopURL",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Shop URL shouldn't be Blank\", function () {",
+											"  pm.response.to.have.status(400);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"my_ORG01\",\n    \"type\":\"organization-type\",\n    \"websiteUrl\":\"https://www.website.url.com\",\n    \"ootbShopUrl\":\"\",\n    \"logoUrl\":\"https://www.ootb.shop.url.com\",\n    \"phone\":\"1122334455\",\n    \"email\":\"email@service.com\",\n    \"language\":\"en\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{rootUrl}}/organization",
+									"host": [
+										"{{rootUrl}}"
+									],
+									"path": [
+										"organization"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "createOrganization_validate-phoneNumber",
+					"item": [
+						{
+							"name": "createOrganization_validate-phoneNumber",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Phone No. shoulb be valid\", function () {",
+											"  pm.response.to.have.status(400);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"my_ORG01\",\n    \"type\":\"organization-type\",\n    \"websiteUrl\":\"https://www.website.url.com\",\n    \"ootbShopUrl\":\"https://www.ootb.shop.url.com\",\n    \"logoUrl\":\"https://www.ootb.shop.url.com\",\n    \"phone\":\"\",\n    \"email\":\"email@service.com\",\n    \"language\":\"en\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{rootUrl}}/organization",
+									"host": [
+										"{{rootUrl}}"
+									],
+									"path": [
+										"organization"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "createOrganization_validate-logoURL",
+					"item": [
+						{
+							"name": "createOrganization_validate-logoURL",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Organization logo URL should be valid one\", function () {",
+											"  pm.response.to.have.status(400);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"my_ORG01\",\n    \"type\":\"organization-type\",\n    \"websiteUrl\":\"https://www.website.url.com\",\n    \"ootbShopUrl\":\"https://www.ootb.shop.url.com\",\n    \"logoUrl\":\"\",\n    \"phone\":\"1122334455\",\n    \"email\":\"email@service.com\",\n    \"language\":\"en\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{rootUrl}}/organization",
+									"host": [
+										"{{rootUrl}}"
+									],
+									"path": [
+										"organization"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Shop",
+			"item": [
+				{
+					"name": "create Shop - positive",
+					"item": [
+						{
+							"name": "createOrganization",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Organization should get created\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response has organization id\", function () {",
+											"    const responseJson = pm.response.json();",
+											"    pm.expect(responseJson.organizationId).to.exist;",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"organizationId\", jsonData.organizationId);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"//let randomID = {{$randomint(1,5)}};",
+											"let randomID = Math.floor((Math.random()*100)+1);",
+											"let Organization = 'myOrg01'+randomID;",
+											"pm.environment.set('orgName', Organization);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"{{orgName}}\",\n    \"type\": \"organization-type\",\n    \"websiteUrl\": \"https://www.website.url.com\",\n    \"ootbShopUrl\": \"https://www.ootb.shop.url.com\", \n    \"logoUrl\": \"https://www.ootb.shop.url.com\",\n    \"phone\": \"1122334455\",\n    \"email\": \"email@service.com\",\n    \"language\": \"en\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{rootLocation}}/organization",
+									"host": [
+										"{{rootLocation}}"
+									],
+									"path": [
+										"organization"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "createShop-positive",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Shop gets created under the organization\", function () {",
+											"  pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Response has shop id\", function () {",
+											"    const responseJson = pm.response.json();",
+											"    pm.expect(responseJson.shopId).to.exist;",
+											"});",
+											"",
+											"pm.test(\"Response has shop name\", function () {",
+											"    const responseJson = pm.response.json();",
+											"    pm.expect(responseJson.shopName).to.exist;",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"shopId\", jsonData.shopId);",
+											"postman.setEnvironmentVariable(\"shopName\", jsonData.shopName);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"let randomID = Math.floor((Math.random()*100)+1);",
+											"let shopNaam = 'myShop01'+randomID;",
+											"pm.environment.set('shopName', shopNaam);",
+											"",
+											"let shopNo = 'ms'+randomID;",
+											"pm.environment.set('shopId', shopNo);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"{{shopName}}\",\n    \"description\":\"myTest Shop\",\n    \"shopId\":\"{{shopId}}\",\n    \"address\":{\n        \"street\":\"Rembrandthof\",\n        \"houseNumber\":\"144\",\n        \"extension\":\"ext\",\n        \"city\":\"Amstelveen\",\n        \"state\":\"Noord Holland\",\n        \"country\":\"NL\",\n        \"postalCode\":\"1186EX\",\n        \"geoLocation\":{\n            \"longitude\":\"4.8682936\",\n            \"latitude\":\"52.2932259\"\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{rootLocation}}/organization/{{organizationId}}/shop",
+									"host": [
+										"{{rootLocation}}"
+									],
+									"path": [
+										"organization",
+										"{{organizationId}}",
+										"shop"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "create Shop_validate ShopName",
+					"item": []
+				},
+				{
+					"name": "create Shop - validate Address",
+					"item": []
+				}
+			]
+		}
+	]
+}
